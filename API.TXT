@@ -1,0 +1,176 @@
+BaseURL: http://192.168.0.17:3000/
+
+
+
+회원가입or로그인 - post
+BaseURL/account
+
+Request
+- @body
+	deviceID {String} 디바이스 ID값
+
+Response - JSON객체
+- @성공
+	status: 'ok', {String} 상태코드
+	result: insertID {Int} 사용자고유ID값
+- @서버에러 - (statusCode 500)
+	status: 'error'
+	result: 'DatabaseError'
+
+
+
+
+공개된 일기 리스트를 불러온다. - get
+BaseURL/diary?page=
+
+Request
+- @header
+	userID {String} 디바이스 ID값
+- @queryString
+	page {Int} 페이지수 0,1,2,3,4,5 .... 
+
+Response - JSON객체
+
+- @성공
+	status: 'ok', {String} 상태코드
+	result: {
+		diaryList: [{
+			diary_id: , {Int} 일기고유id값
+			user_id: , {Int} 사용자고유id값
+			keyword_contents: , {String} 일기질문
+			diary_contents: , {String} 일기내용
+			diary_writeDate: , {Stirng} 일기작성시간
+			diary_writerFeeling: , {String} 작성자기분상태 (soso, happy, sad, angry)
+			diary_happy: , {Int} 좋아요갯수
+			diary_sad: , {Int} 슬퍼요갯수
+			diary_angry: , {Int} 화나요갯수
+			isLiked: , {Int} 내가좋아요한(0: 좋아요없을시, 1: 좋아요, 2: 슬퍼요, 3: 화나요)내용
+
+		}, {..}, {..}....] 
+	}
+
+- @서버에러 - (statusCode 500)
+	status: 'error'
+	result: 'DatabaseError'
+
+- @잘못된사용자id (statusCode 401)
+	status: 'error'
+	result: 'InvaliduserID'
+
+
+
+일기를 작성한다. - post
+BaseURL/diary
+
+Request
+- @header
+	userID {String} 디바이스 ID값
+- @body
+	keyword_id {Int} 키워드(질문)고유id값 (직접입력할경우에만 존재)
+	diary_contents {String} 일기내용 
+	diary_writerFeeling {String} 작성자의기분상태(soso, happy, sad, angry)
+	diary_secrit {Int} 공개상태 (공개:1, 비공개:0)
+	keyword_contents {String} 키워드(질문)내용 (키워드(질문)가없을경우에만 존재)
+
+Response - JSON객체
+- @성공
+	status: 'ok', {String} 상태코드
+	result: insertID {Int} 저장된일기의 고유ID값
+
+- @서버에러 - (statusCode 500)
+	status: 'error'
+	result: 'DatabaseError'
+
+- @잘못된사용자id (statusCode 401)
+	status: 'error'
+	result: 'InvaliduserID'
+
+- @잘못된매개변수(파라미터) (statusCode 404)
+	status: 'error'
+	result: 'InvalidParameter'
+
+
+
+좋아요(좋아요, 슬퍼요, 화나요)
+BaseURL/diary/:diaryID
+
+Request
+- @header
+	userID {String} 디바이스 ID값
+- @body
+	diary_statusCode {Int} 좋아요정보(1: 좋아요, 2: 슬퍼요, 3: 화나요)
+- @params
+	dirayID {Int} 일기고유id값
+
+Response - JSON객체
+- @성공
+	status: 'ok', {String} 상태코드
+	result: insertID {Int} 저장된일기의 고유ID값
+
+- @서버에러 - (statusCode 500)
+	status: 'error'
+	result: 'DatabaseError'
+
+- @잘못된사용자id (statusCode 401)
+	status: 'error'
+	result: 'InvaliduserID'
+
+- @잘못된매개변수(파라미터) (statusCode 404)
+	status: 'error'
+	result: 'InvalidParameter'
+
+
+
+나의 일기 리스트를 불러온다. - get
+BaseURL/diary/me?page=
+
+Request
+- @header
+	userID {String} 디바이스 ID값
+- @queryString
+	page {Int} 페이지수 0,1,2,3,4,5 .... 
+
+Response - JSON객체
+
+- @성공
+	status: 'ok', {String} 상태코드
+	result: {
+		diaryList: [{
+			diary_id: , {Int} 일기고유id값
+			user_id: , {Int} 사용자고유id값
+			keyword_contents: , {String} 일기질문
+			diary_contents: , {String} 일기내용
+			diary_writeDate: , {Stirng} 일기작성시간
+			diary_writerFeeling: , {String} 작성자기분상태 (soso, happy, sad, angry)
+			diary_happy: , {Int} 좋아요갯수
+			diary_sad: , {Int} 슬퍼요갯수
+			diary_angry: , {Int} 화나요갯수
+		}, {..}, {..}....] 
+	}
+
+- @서버에러 - (statusCode 500)
+	status: 'error'
+	result: 'DatabaseError'
+
+- @잘못된사용자id (statusCode 401)
+	status: 'error'
+	result: 'InvaliduserID'
+
+
+
+
+keyword가지고오기 - get
+BaseURL/keyowrd
+
+Request
+
+Response - JSON객체
+- @성공
+	status: 'ok', {String} 상태코드
+	result: [{
+		keyword_id: 1, {Int} 질문 고유id값
+		keyword_contents: "" {String} 질문내용
+	}]
+- @서버에러 - (statusCode 500)
+	status: 'error'
+	result: 'DatabaseError'
