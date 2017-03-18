@@ -1,7 +1,7 @@
 var dbPoolConfig = {
     host: 'localhost',
-    user: 'root',
-    password: 'sodwkdrh123',
+    user: 'user',
+    password: 'pw',
     database: 'mash-up',
     connectionLimit: 5,
     //debug : true
